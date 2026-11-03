@@ -1,0 +1,8 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+buy_with_ai.db
+buy_with_ai.db-wal
+buy_with_ai.db-shm
+.env
