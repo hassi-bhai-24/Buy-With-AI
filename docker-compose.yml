@@ -1,0 +1,40 @@
+# Buy with AI — Docker Compose (backend + frontend, zero-budget).
+# The SQLite database lives on a named volume so checks, baselines,
+# watchlist and chat history survive container restarts.
+# Ollama is intentionally NOT in this file: run it on the host
+# (ollama serve) and the backend will use it when reachable; without
+# it, verdicts use the labelled rule-based engine.
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: "sqlite+aiosqlite:////data/buy_with_ai.db"
+      OLLAMA_BASE_URL: "http://host.docker.internal:11434"
+    volumes:
+      - buywithai-data:/data
+    expose:
+      - "8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/v1/health', timeout=4)"]
+      interval: 30s
+      timeout: 5s
+      start_period: 15s
+      retries: 3
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  buywithai-data:
+    name: buywithai-data
