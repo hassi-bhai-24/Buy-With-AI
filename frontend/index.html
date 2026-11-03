@@ -1,0 +1,34 @@
+<!doctype html>
+<!-- data-theme="dark" is the default; main.tsx applies the persisted
+     theme (localStorage "buywithai-theme") or prefers-color-scheme
+     before first render. -->
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Content Security Policy (spec doc 09 §3, adapted: all API/SSE
+         traffic is same-origin via the Vite /api proxy, so connect-src
+         stays 'self'; no third-party origins are used).
+         NOTE: style-src includes 'unsafe-inline' because Tailwind's
+         compiled stylesheet is external ('self') but React and the
+         motion animation library set inline styles at runtime (style
+         attributes); without it those runtime styles would be blocked.
+         No inline <script> is used anywhere in this app. -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self'; img-src 'self' data: blob:; font-src 'self'; object-src 'none'; base-uri 'self'"
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0c0a09" />
+    <meta
+      name="description"
+      content="Buy with AI — a brutally honest verdict before you commit cash. Local price bands, red flags, and counter-offers."
+    />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <title>Buy with AI — Check before you pay</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
